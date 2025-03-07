@@ -1,0 +1,88 @@
+/* Container */
+.log-document-container {
+  width: 900px;
+  margin: 20px auto;
+  padding: 20px;
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  font-family: Arial, sans-serif;
+  color: #2c3e50;
+}
+
+/* Header Section */
+.log-header {
+  text-align: center;
+  margin-bottom: 20px;
+  border-bottom: 2px solid #ecf0f1;
+  padding-bottom: 10px;
+}
+
+.log-header h1 {
+  font-size: 24px;
+  color: #3498db; /* Blue */
+}
+
+.log-header p {
+  font-size: 14px;
+  color: #34495e; /* Dark gray */
+  margin: 5px 0;
+}
+
+/* Details Section */
+.log-details {
+  margin-bottom: 20px;
+}
+
+.log-details h2 {
+  font-size: 18px;
+  margin-bottom: 10px;
+  color: #2c3e50;
+  border-bottom: 1px solid #ecf0f1;
+  padding-bottom: 5px;
+}
+
+.log-details p {
+  font-size: 14px;
+  color: #34495e;
+  line-height: 1.6;
+}
+
+/* Footer Section */
+.log-actions {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  margin-top: 50px;
+}
+
+.log-actions .delete-button {
+  background-color: #e74c3c; /* Red */
+  color: white;
+  font-size: 16px;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.log-actions .delete-button:hover {
+  background-color: #c0392b; /* Darker red on hover */
+}
+
+.log-actions .update-button {
+  background-color: #3498db; /* Blue */
+  color: white;
+  font-size: 16px;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.log-actions .update-button:hover {
+  background-color: #2980b9; /* Darker blue on hover */    
+}

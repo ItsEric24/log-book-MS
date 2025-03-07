@@ -1,0 +1,79 @@
+/* Container Styling */
+.daily-logs-list-container {
+  width: 100%;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+  overflow: auto;
+}
+
+.daily-logs-list-container h1 {
+  text-align: center;
+  color: #2c3e50; /* Dark blue */
+  margin-bottom: 20px;
+}
+
+/* List Styling */
+.daily-logs-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.daily-log-item {
+  padding: 15px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #ecf0f1; /* Light grey */
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.2s ease;
+}
+
+.daily-log-item:hover {
+  background-color: #f9f9f9; /* Slight hover effect */
+}
+
+.daily-log-item p {
+  margin: 5px 0;
+  font-size: 14px;
+  color: #2c3e50;
+}
+
+.daily-log-item strong {
+  color: #34495e;
+}
+
+.daily-logs-header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.daily-logs-header label {
+  font-size: 16px;
+  margin-right: 10px;
+  color: #2c3e50;
+}
+
+.daily-logs-header select {
+  font-size: 14px;
+  padding: 5px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+.daily-logs-btn{
+    padding: 8px 15px;
+    border: none;
+    border-radius: 5px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    background-color: #3498db;
+    color: white;
+}
+
+.daily-logs-btn:hover{
+    background-color: #2980b9;
+}
+
+

@@ -1,0 +1,112 @@
+/* AdminLogbook.css */
+.admin-logbook-document {
+  width: 900px;
+  margin: 50px auto;
+  background-color: #f9f9f9;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.admin-logbook-header {
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.admin-logbook-header h1 {
+  font-size: 24px;
+  color: #333;
+}
+
+.admin-logbook-header p {
+  font-size: 14px;
+  color: #555;
+}
+
+.admin-daily-logs {
+  margin-bottom: 20px;
+}
+
+.admin-daily-logs h2 {
+  font-size: 20px;
+  margin-bottom: 10px;
+  color: #444;
+}
+
+.admin-daily-log {
+  margin-bottom: 15px;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background-color: #fff;
+}
+
+.admin-daily-log h3 {
+  font-size: 16px;
+  margin-bottom: 5px;
+  color: #222;
+}
+
+.admin-daily-log p {
+  font-size: 14px;
+  color: #555;
+}
+
+.admin-weekly-summary {
+  margin-bottom: 20px;
+}
+
+.admin-weekly-summary h2 {
+  font-size: 20px;
+  margin-bottom: 10px;
+  color: #444;
+}
+
+.admin-weekly-summary p {
+  font-size: 14px;
+  color: #555;
+  line-height: 1.6;
+}
+
+.admin-logbook-footer {
+  margin-top: 20px;
+  font-size: 14px;
+  color: #555;
+}
+
+.admin-logbook-action-buttons {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.admin-approve-button,
+.admin-sign-button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  color: #fff;
+}
+
+.admin-approve-button {
+  background-color: #28a745; /* Green */
+}
+
+.admin-approve-button:disabled{
+  cursor: not-allowed;
+}
+
+.admin-approve-button:hover {
+  background-color: #218838;
+}
+
+.admin-sign-button {
+  background-color: #007bff; /* Blue */
+}
+
+.admin-sign-button:hover {
+  background-color: #0056b3;
+}
