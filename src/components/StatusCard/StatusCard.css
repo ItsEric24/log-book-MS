@@ -1,8 +1,11 @@
 .stats-card {
-  background-color: #f39c12;
+  background: rgba(255, 255, 255, 0.1);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
   color: white;
   padding: 15px;
-  border-radius: 8px;
   display: flex;
   align-items: center;
   margin: 10px;

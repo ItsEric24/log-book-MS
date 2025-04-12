@@ -77,13 +77,16 @@ function SingleLogbook() {
 
   async function generatePDF() {
     try {
-      const response = await fetch(`http://localhost:8000/api/logbooks/logbook/pdf/${id}`, {
-        method: "GET",
-        headers: {
-          Accept: "application/pdf",
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await fetch(
+        `http://localhost:8000/api/logbooks/logbook/pdf/${id}`,
+        {
+          method: "GET",
+          headers: {
+            Accept: "application/pdf",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
       const blob = await response.blob();
 
@@ -114,6 +117,10 @@ function SingleLogbook() {
         <p>
           <strong>Submission Date:</strong>{" "}
           {new Date(logbook.date).toDateString()}
+        </p>
+        <p>
+          <strong>School:</strong>{" "}
+          {logbook.school}
         </p>
       </header>
 
@@ -151,6 +158,10 @@ function SingleLogbook() {
         </p>
         <p>
           <strong>Signed By:</strong> {logbook.signed_by || "No signature yet."}
+        </p>
+        <p>
+          <strong>Supervisor Phone:</strong>{" "}
+          {logbook.supervisor_phone || "No phone number."}
         </p>
       </footer>
       <div className="logbook-action-buttons">

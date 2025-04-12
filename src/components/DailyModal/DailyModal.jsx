@@ -30,7 +30,7 @@ const DailyModal = ({ isOpen, onClose, onSave, initialData }) => {
         setFormErrors("");
       }
     }
-    setFormData({ ...formData, [name]: value });
+    setFormData({ ...formData, [name]: name === "weekNumber" ? Number(value) : value});
   };
 
   const handleSubmit = (e) => {
@@ -54,19 +54,25 @@ const DailyModal = ({ isOpen, onClose, onSave, initialData }) => {
         <button className="daily-modal-close" onClick={onClose}>
           &times;
         </button>
-        <h2>Work Details</h2>
+        <h2>Work Details for week {formData.weekNumber ? formData.weekNumber : "1"}</h2>
         <form onSubmit={handleSubmit}>
           {/* Input fields */}
           <div className="daily-modal-form-group">
-            <label htmlFor="week">Week</label>
-            <input
-              type="text"
-              id="week"
+            <label htmlFor="weekNumber">Week</label>
+            <select
+              id="weekNumber"
               name="weekNumber"
               value={formData.weekNumber}
               onChange={handleChange}
               required
-            />
+            >
+            <option defaultValue={true} value="">--Select Week--</option>
+              {[...Array(12).keys()].map((week) => (
+                <option key={week + 1} value={week + 1}>
+                  Week {week + 1}
+                </option>
+              ))}
+            </select>
           </div>
           {formErrors && (
             <p style={{ color: "red", fontWeight: "bold", fontSize: "12px" }}>

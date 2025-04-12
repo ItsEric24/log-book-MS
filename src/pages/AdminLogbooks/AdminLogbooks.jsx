@@ -12,7 +12,6 @@ function AdminLogbooks() {
   const navigate = useNavigate();
 
   // State for filters
-  const [selectedDepartment, setSelectedDepartment] = useState(user.department);
   const [selectedWeek, setSelectedWeek] = useState("");
 
   useEffect(() => {
@@ -24,12 +23,12 @@ function AdminLogbooks() {
   };
 
   // Filter logbooks based on selected department and week
-  const filteredLogs = adminLogs.filter((logbook) => {
-    return (
-      (!selectedDepartment || logbook.department === selectedDepartment) &&
-      (!selectedWeek || logbook.week_number === selectedWeek)
-    );
-  });
+  const filteredLogs = adminLogs
+    .filter((logbook) => logbook.school === user.school)
+    .filter((logbook) => logbook.department === user.department)
+    .filter((logbook) => {
+      return !selectedWeek || logbook.week_number === selectedWeek;
+    });
 
   return (
     <div className="approve-logbooks-container">
@@ -37,21 +36,6 @@ function AdminLogbooks() {
 
       {/* Filter Selectors */}
       <div className="filters">
-        <label className="filter-label">
-          Department:
-          <select
-            className="filter-select"
-            value={selectedDepartment}
-            onChange={(e) => setSelectedDepartment(e.target.value)}
-          >
-            <option value="">All Departments</option>
-            <option value="cybersecurity">Cybersecurity</option>
-            <option value="knoc">KNOC</option>
-            <option value="infrastructure">Infrastructure</option>
-            <option value="support">Support</option>
-          </select>
-        </label>
-
         <label className="filter-label">
           Week:
           <select
@@ -95,11 +79,14 @@ function AdminLogbooks() {
                   <strong>Is Signed:</strong>{" "}
                   {logbook.is_approved ? "Signed" : "Not Signed"}
                 </p>
+                <p>
+                  <strong>School:</strong> {logbook.school}
+                </p>
               </div>
             </div>
           ))
         ) : (
-          <p style={{ color: "#525252", textAlign: "center" }}>
+          <p style={{ color: "#ffffff", textAlign: "center" }}>
             No logbooks at the moment
           </p>
         )}

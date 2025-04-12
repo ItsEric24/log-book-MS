@@ -9,6 +9,7 @@ function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [department, setDepartment] = useState("");
+  const [school, setSchool] = useState("");
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -22,13 +23,13 @@ function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!email || !password || !department) {
+    if (!email || !password || !department || !school) {
       return toast.error("Please fill in all fields");
     }
 
     // Dispatch login action and wait for it to resolve
     try {
-      await dispatch(login({ email, password, department })).unwrap();
+      await dispatch(login({ email, password, department, school })).unwrap();
       // If login is successful
       toast.success(
         "Login successful, you will be redirected to the dashboard shortly"
@@ -89,6 +90,22 @@ function Login() {
               <option value="knoc">Knoc</option>
               <option value="support">Support</option>
               <option value="cybersecurity">Cybersecurity</option>
+            </select>
+          </div>
+          <div className="form-group">
+            <label htmlFor="school">School</label>
+            <select
+              id="school"
+              name="school"
+              onChange={(e) => setSchool(e.target.value)}
+            >
+              <option value="" defaultValue={true}>
+                --Select a School--
+              </option>
+              <option value="kca">KCA</option>
+              <option value="daystar">Daystar</option>
+              <option value="usiu">USIU</option>
+              <option value="zetech">Zetech</option>
             </select>
           </div>
           <button type="submit" className="auth-button">

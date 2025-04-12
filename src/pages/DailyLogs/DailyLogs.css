@@ -8,7 +8,7 @@
 
 .daily-logs-list-container h1 {
   text-align: center;
-  color: #2c3e50; /* Dark blue */
+  color: #ffffff;
   margin-bottom: 20px;
 }
 
@@ -51,7 +51,7 @@
 .daily-logs-header label {
   font-size: 16px;
   margin-right: 10px;
-  color: #2c3e50;
+  color: #ffffff;
 }
 
 .daily-logs-header select {

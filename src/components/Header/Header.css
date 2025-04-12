@@ -1,10 +1,13 @@
 .header {
-  background-color: #ecf0f1;
-  padding: 15px;
+  background: linear-gradient(135deg, #5f0a87, #a4508b);
+  color: white;
+  padding: 16px 24px;
+  font-size: 1.5rem;
+  font-weight: bold;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   display: flex;
   justify-content: space-between;
   align-items: center;
-  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 }
 
 .header-title {
@@ -12,7 +15,7 @@
   font-weight: bold;
 }
 
-.header-content{
+.header-content {
   display: flex;
   flex-direction: column;
 }

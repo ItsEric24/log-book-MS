@@ -56,7 +56,7 @@ function AllLogbooks() {
             </div>
           ))
         ) : (
-          <p style={{ color: "#525252", textAlign: "center" }}>
+          <p style={{ color: "#ffffff", textAlign: "center" }}>
             No logbooks at the moment, you can create one at the &apos;submit
             logbook section&apos;
           </p>

@@ -40,6 +40,7 @@ LogBookMS`;
       dailyLogs: dailyLogs.filter(
         (log) => Number(log.week_number) === weekNumber
       ),
+      school: user.school
     };
 
     if (weeklyLogData.dailyLogs.length === 0) {
@@ -59,7 +60,7 @@ LogBookMS`;
       toast.success("Weekly log submitted successfully");
       sendEmail(
         "eddiesolentai@gmail.com",
-        "chewbaccam200@gmail.com",
+        "eddymunene12@gmail.com",
         "LogBookSubmission",
         logBookEmailMessage,
         token
@@ -109,7 +110,7 @@ LogBookMS`;
           ))}
         {dailyLogs.filter((log) => Number(log.week_number) === weekNumber)
           .length === 0 && (
-          <p style={{ color: "#525252", textAlign: "center" }}>
+          <p style={{ color: "#ffffff", textAlign: "center" }}>
             No Logs for week {weekNumber}
           </p>
         )}
@@ -117,7 +118,7 @@ LogBookMS`;
 
       {/* Weekly Summary */}
       <div className="weekly-summary">
-        <h2>Write Week Summary</h2>
+        <h2 style={{ color: "#ffffff"}}>Write Week Summary</h2>
         <textarea
           placeholder="Write your week summary here..."
           value={weekSummary}

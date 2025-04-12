@@ -1,6 +1,6 @@
 import { Link } from "react-router";
 import { useState } from "react";
-import {ToastContainer, toast} from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
 import "../Auth.css";
 
 function SignUp() {
@@ -8,13 +8,58 @@ function SignUp() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [department, setDepartment] = useState("");
+  const [school, setSchool] = useState("");
+  const [errors, setErrors] = useState({});
 
-  const handleSubmit = async(e) => {
+  const errorStyle = {
+    color: "red",
+    fontSize: "12px",
+    fontWeight: "bold"
+  }
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Implement user registration logic here
-    const user = { name, email, password, department };
 
-    if(!name || !email || !password || !department){
+    const newErrors = {};
+
+    const nameRegex = /^[a-zA-Z]{2,}(?: [a-zA-Z]+)*$/;
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z]+\.[a-zA-Z]{2,}$/;
+
+    if (!name) {
+      newErrors.name = "Full name is required";
+    } else if (!nameRegex.test(name)) {
+      newErrors.name = "Enter a valid full name (letters only)";
+    }
+
+    if (!email) {
+      newErrors.email = "Email is required";
+    } else if (
+      !emailRegex.test(email) ||
+      email.startsWith("1") ||
+      email.split("@")[0].length < 4
+    ) {
+      newErrors.email = "Enter a valid email (e.g., john.doe@example.com)";
+    }
+
+    if (!password) {
+      newErrors.password = "Password is required";
+    } else if (password.length < 6) {
+      newErrors.password = "Password must be at least 6 characters";
+    }
+
+    if (!department) newErrors.department = "Department is required";
+    if (!school) newErrors.school = "School is required";
+
+    setErrors(newErrors);
+
+    // Stop if there are errors
+    if (Object.keys(newErrors).length > 0) {
+      return;
+    }
+    // Implement user registration logic here
+    const user = { name, email, password, department, school };
+
+    if (!name || !email || !password || !department || !school) {
       return toast.error("Please fill in all fields");
     }
     const url = "http://localhost:8000/api/users/register";
@@ -39,7 +84,6 @@ function SignUp() {
       setPassword("");
       setDepartment("");
     }
-
   };
   return (
     <div className="auth-container">
@@ -55,6 +99,7 @@ function SignUp() {
               placeholder="Enter your full name"
               onChange={(e) => setName(e.target.value)}
             />
+            {errors.name && <p style={errorStyle}>{errors.name}</p>}
           </div>
           <div className="form-group">
             <label htmlFor="email">Email</label>
@@ -65,6 +110,7 @@ function SignUp() {
               placeholder="Enter your email"
               onChange={(e) => setEmail(e.target.value)}
             />
+            {errors.email && <p style={errorStyle}>{errors.email}</p>}
           </div>
           <div className="form-group">
             <label htmlFor="password">Password</label>
@@ -75,6 +121,7 @@ function SignUp() {
               placeholder="Enter your password"
               onChange={(e) => setPassword(e.target.value)}
             />
+            {errors.password && <p style={errorStyle}>{errors.password}</p>}
           </div>
           <div className="form-group">
             <label htmlFor="department">Department</label>
@@ -83,14 +130,34 @@ function SignUp() {
               name="department"
               onChange={(e) => setDepartment(e.target.value)}
             >
-              <option value="" disabled defaultValue={true}>
-                Select a department
+              <option value="" defaultValue={true}>
+                --Select a department--
               </option>
               <option value="infrastructure">Infrastructure</option>
               <option value="knoc">Knoc</option>
               <option value="support">Support</option>
               <option value="cybersecurity">Cybersecurity</option>
             </select>
+            {errors.department && (
+              <p style={errorStyle}>{errors.department}</p>
+            )}
+          </div>
+          <div className="form-group">
+            <label htmlFor="school">School</label>
+            <select
+              id="school"
+              name="school"
+              onChange={(e) => setSchool(e.target.value)}
+            >
+              <option value="" defaultValue={true}>
+                --Select a School--
+              </option>
+              <option value="kca">KCA</option>
+              <option value="daystar">Daystar</option>
+              <option value="usiu">USIU</option>
+              <option value="zetech">Zetech</option>
+            </select>
+            {errors.school && <p style={errorStyle}>{errors.school}</p>}
           </div>
           <button type="submit" className="auth-button" onClick={handleSubmit}>
             Sign Up

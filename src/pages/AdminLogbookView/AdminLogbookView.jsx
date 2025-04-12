@@ -2,12 +2,18 @@ import "./AdminLogbookView.css";
 // import { myLogBook as logbook } from "../../utils/data";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
-import ApproveModal from "../../components/ApproveModal/ApproveModal";
 import { ToastContainer, toast } from "react-toastify";
 
 function AdminLogbookView() {
   const [logbook, setLogbook] = useState({});
-  const [isOpen, setIsOpen] = useState(false);
+  const [isEditingComment, setIsEditingComment] = useState(false);
+  const [supervisorComment, setSupervisorComment] = useState("");
+  const [isEditingSignedBy, setIsEditingSignedBy] = useState(false);
+  const [isEditingSupervisorPhone, setIsEditingSupervisorPhone] =
+    useState(false);
+  const [supervisorPhoneNumber, setSupervisorPhoneNumber] = useState("");
+  const [signedBy, setSignedBy] = useState("");
+
   const { id } = useParams();
   const token = localStorage.getItem("token");
   const naviagte = useNavigate();
@@ -30,6 +36,9 @@ function AdminLogbookView() {
         }
         const data = await response.json();
         setLogbook(data.data[0]);
+        setSupervisorComment(data.data[0].supervisor_comments || "");
+        setSignedBy(data.data[0].signed_by || "");
+        setSupervisorPhoneNumber(data.data[0].supervisor_phone_number || "");
       } catch (error) {
         console.log(error);
       }
@@ -38,16 +47,18 @@ function AdminLogbookView() {
     fetchLogbook();
   }, [id, token]);
 
-  const handleApproval = async (approvalData) => {
+  const handleApproval = async () => {
+    if(supervisorPhoneNumber.length < 10){
+      return toast.error("Please check your phone number")
+    }
     const response = await fetch(
-      `http://localhost:8000/api/logbooks/admin/logbook/${id}`,
+      `http://localhost:8000/api/logbooks/admin/logbook/approve/${id}`,
       {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify(approvalData),
       }
     );
 
@@ -55,7 +66,6 @@ function AdminLogbookView() {
       toast.error("Failed to approve logbook. Please try again.");
     }
 
-    setIsOpen(false);
     toast.success("Logbook approved successfully");
 
     setTimeout(() => {
@@ -70,6 +80,116 @@ function AdminLogbookView() {
       </p>
     );
   }
+
+  const handleCommentClick = () => {
+    setIsEditingComment(true);
+  };
+
+  const handleCommentChange = (e) => {
+    setSupervisorComment(e.target.value);
+  };
+
+  const handleCommentBlur = async () => {
+    setIsEditingComment(false);
+
+    try {
+      const response = await fetch(
+        `http://localhost:8000/api/logbooks/admin/logbook/comments/${id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ supervisor_comments: supervisorComment }),
+        }
+      );
+
+      if (!response.ok) {
+        toast.error("Failed to update supervisor comment.");
+      } else {
+        toast.success("Comment updated.");
+      }
+    } catch (error) {
+      toast.error("Something went wrong.");
+      console.error(error);
+    }
+  };
+
+  const handleSignedByClick = () => {
+    setIsEditingSignedBy(true);
+  };
+
+  const handleSignedByChange = (e) => {
+    setSignedBy(e.target.value);
+  };
+
+  const handleSignedByBlur = async () => {
+    setIsEditingSignedBy(false);
+
+    try {
+      const response = await fetch(
+        `http://localhost:8000/api/logbooks/admin/logbook/signedby/${id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ signed_by: signedBy }),
+        }
+      );
+
+      if (!response.ok) {
+        toast.error("Failed to update signed by field.");
+      } else {
+        toast.success("Signed by updated successfully.");
+      }
+    } catch (error) {
+      toast.error("An error occurred while updating signed by.");
+      console.error(error);
+    }
+  };
+
+  const handlePhoneClick = () => {
+    setIsEditingSupervisorPhone(true);
+  };
+
+  const handlePhoneChange = (e) => {
+    setSupervisorPhoneNumber(e.target.value);
+  };
+
+  const handlePhoneBlur = async () => {
+    setIsEditingSupervisorPhone(false);
+
+    if(supervisorPhoneNumber.length < 10){
+      return toast.error("Phone number must be 10 digits")
+    }
+    try {
+      const response = await fetch(
+        `http://localhost:8000/api/logbooks/admin/logbook/supervisor-phone/${id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            supervisor_phone: supervisorPhoneNumber,
+          }),
+        }
+      );
+
+      if (!response.ok) {
+        toast.error("Failed to update phone number.");
+      } else {
+        toast.success("Phone number updated successfully.");
+      }
+    } catch (error) {
+      toast.error("An error occurred while updating phone number.");
+      console.error(error);
+    }
+  };
 
   return (
     <div className="admin-logbook-document">
@@ -115,12 +235,87 @@ function AdminLogbookView() {
         <h2>Weekly Summary</h2>
         <p>{logbook.weekly_summary}</p>
       </section>
-
-      {/* Footer (Optional Supervisor Comments) */}
       <footer className="admin-logbook-footer">
         <p>
           <strong>Supervisor Comments:</strong>{" "}
-          {logbook.supervisor_comments || "No comments yet."}
+          {isEditingComment ? (
+            <input
+              type="text"
+              value={supervisorComment}
+              onChange={handleCommentChange}
+              onBlur={handleCommentBlur}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") e.target.blur();
+              }}
+              // autoFocus
+              style={{
+                padding: "5px",
+                width: "100%",
+                outline: "none"
+              }}
+            />
+          ) : (
+            <span
+              onClick={handleCommentClick}
+              style={{
+                cursor: "pointer",
+              }}
+            >
+              {supervisorComment || "No comments yet. Click to add."}
+            </span>
+          )}
+        </p>
+        <p>
+          <strong>Signed By:</strong>
+          {isEditingSignedBy ? (
+            <input
+              type="text"
+              value={signedBy}
+              onChange={handleSignedByChange}
+              onBlur={handleSignedByBlur}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") e.target.blur();
+              }}
+              className="admin-logbook-signedby-input"
+              autoFocus
+            />
+          ) : (
+            <span
+              className="admin-logbook-signedby-text"
+              onClick={handleSignedByClick}
+              style={{
+                cursor: "pointer"
+              }}
+            >
+              {signedBy || "Not yet signed. Click to edit."}
+            </span>
+          )}
+        </p>
+        <p>
+          <strong>Supervisor Phone:</strong>
+          {isEditingSupervisorPhone ? (
+            <input
+              type="tel"
+              value={supervisorPhoneNumber}
+              onChange={handlePhoneChange}
+              onBlur={handlePhoneBlur}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") e.target.blur();
+              }}
+              className="admin-logbook-phone-input"
+              autoFocus
+            />
+          ) : (
+            <span
+              className="admin-logbook-phone-text"
+              onClick={handlePhoneClick}
+              style={{
+                cursor: "pointer"
+              }}
+            >
+              {supervisorPhoneNumber || "Click to add phone number"}
+            </span>
+          )}
         </p>
       </footer>
 
@@ -128,17 +323,12 @@ function AdminLogbookView() {
       <div className="admin-logbook-action-buttons">
         <button
           className="admin-approve-button"
-          onClick={() => setIsOpen(true)}
+          onClick={handleApproval}
           disabled={logbook.is_approved ? true : false}
         >
           Approve
         </button>
       </div>
-      <ApproveModal
-        isOpen={isOpen}
-        onClose={() => setIsOpen(false)}
-        onApprove={handleApproval}
-      />
       <ToastContainer />
     </div>
   );
