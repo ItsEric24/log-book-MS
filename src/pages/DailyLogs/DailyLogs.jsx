@@ -12,7 +12,7 @@ function DailyLogs() {
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
   const [weekNumber, setWeekNumber] = useState(1);
-  const {dailyLogs, loading} = useSelector((state) => state.dailyLog);
+  const { dailyLogs, loading } = useSelector((state) => state.dailyLog);
   const dispatch = useDispatch();
   const user = JSON.parse(localStorage.getItem("user"));
   const token = localStorage.getItem("token");
@@ -35,25 +35,21 @@ function DailyLogs() {
       body: JSON.stringify(formData),
     });
 
-    const logExists = await response.json();
+    const data = await response.json();
 
-    if (response.status === 200) {
+    if (response.status === 400 || data.message === "Log already exists") {
+      return toast.error(data.message || "There was an error saving the log");
+    }
+
+    if (response.ok) {
+      toast.success(`${data.message}`);
       dispatch(fetchDailyLogs({ token, id: user.id }));
-      toast.success("Daily log saved");
-    }
-
-    if (logExists.message === "Log already exists") {
-      return toast.error("Log already exists");
-    }
-
-    if (response.status === 400) {
-      return toast.error("There was an error saving the log");
     }
   }
 
-  if (loading) {
-    return <Loader color="black" width="100" height="100" />
-  }
+  // if (loading) {
+  //   return <Loader color="black" width="100" height="100" />;
+  // }
   return (
     <div className="daily-logs-list-container">
       <div className="daily-logs-header">

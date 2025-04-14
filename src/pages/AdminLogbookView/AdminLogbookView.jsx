@@ -38,7 +38,7 @@ function AdminLogbookView() {
         setLogbook(data.data[0]);
         setSupervisorComment(data.data[0].supervisor_comments || "");
         setSignedBy(data.data[0].signed_by || "");
-        setSupervisorPhoneNumber(data.data[0].supervisor_phone_number || "");
+        setSupervisorPhoneNumber(data.data[0].supervisor_phone || "");
       } catch (error) {
         console.log(error);
       }
@@ -48,8 +48,8 @@ function AdminLogbookView() {
   }, [id, token]);
 
   const handleApproval = async () => {
-    if(supervisorPhoneNumber.length < 10){
-      return toast.error("Please check your phone number")
+    if (supervisorPhoneNumber.length < 10) {
+      return toast.error("Please check your phone number");
     }
     const response = await fetch(
       `http://localhost:8000/api/logbooks/admin/logbook/approve/${id}`,
@@ -92,6 +92,17 @@ function AdminLogbookView() {
   const handleCommentBlur = async () => {
     setIsEditingComment(false);
 
+    // Validate supervisor comment (e.g., minimum 3 letters, not just digits or gibberish)
+    const trimmedComment = supervisorComment.trim();
+
+    // Check if comment has at least 3 alphabetic characters
+    const hasEnoughLetters = /[a-zA-Z]{3,}/.test(trimmedComment);
+
+    if (!hasEnoughLetters) {
+      toast.error("Please enter a meaningful comment.");
+      return;
+    }
+
     try {
       const response = await fetch(
         `http://localhost:8000/api/logbooks/admin/logbook/comments/${id}`,
@@ -126,6 +137,17 @@ function AdminLogbookView() {
 
   const handleSignedByBlur = async () => {
     setIsEditingSignedBy(false);
+
+    // Validate supervisor comment (e.g., minimum 3 letters, not just digits or gibberish)
+    const trimmedComment = signedBy.trim();
+
+    // Check if comment has at least 3 alphabetic characters
+    const hasEnoughLetters = /[a-zA-Z]{3,}/.test(trimmedComment);
+
+    if (!hasEnoughLetters) {
+      toast.error("Please ensure signed by is an actual name");
+      return;
+    }
 
     try {
       const response = await fetch(
@@ -162,8 +184,8 @@ function AdminLogbookView() {
   const handlePhoneBlur = async () => {
     setIsEditingSupervisorPhone(false);
 
-    if(supervisorPhoneNumber.length < 10){
-      return toast.error("Phone number must be 10 digits")
+    if (supervisorPhoneNumber.length < 10) {
+      return toast.error("Phone number must be 10 digits");
     }
     try {
       const response = await fetch(
@@ -251,7 +273,7 @@ function AdminLogbookView() {
               style={{
                 padding: "5px",
                 width: "100%",
-                outline: "none"
+                outline: "none",
               }}
             />
           ) : (
@@ -284,7 +306,7 @@ function AdminLogbookView() {
               className="admin-logbook-signedby-text"
               onClick={handleSignedByClick}
               style={{
-                cursor: "pointer"
+                cursor: "pointer",
               }}
             >
               {signedBy || "Not yet signed. Click to edit."}
@@ -310,7 +332,7 @@ function AdminLogbookView() {
               className="admin-logbook-phone-text"
               onClick={handlePhoneClick}
               style={{
-                cursor: "pointer"
+                cursor: "pointer",
               }}
             >
               {supervisorPhoneNumber || "Click to add phone number"}

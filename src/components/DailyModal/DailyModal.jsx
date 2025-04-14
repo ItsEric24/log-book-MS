@@ -10,7 +10,7 @@ const DailyModal = ({ isOpen, onClose, onSave, initialData }) => {
     description: "",
     skillsLearnt: "",
   });
-  const [formErrors, setFormErrors] = useState("");
+  const [formErrors, setFormErrors] = useState({});
   const student = JSON.parse(localStorage.getItem("user"));
 
   useEffect(() => {
@@ -30,13 +30,39 @@ const DailyModal = ({ isOpen, onClose, onSave, initialData }) => {
         setFormErrors("");
       }
     }
-    setFormData({ ...formData, [name]: name === "weekNumber" ? Number(value) : value});
+    setFormErrors(false);
+    setFormData({
+      ...formData,
+      [name]: name === "weekNumber" ? Number(value) : value,
+    });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onSave({ studentId: student.id, ...formData });
+
+    const { description, skillsLearnt } = formData;
+
+    const hasLetter = /[a-zA-Z]/;
+    const newErrors = {};
+
+    if (!hasLetter.test(description) || description.trim().length < 10) {
+      newErrors.description =
+        "Description must be at least 10 characters and contain letters.";
+    }
+
+    if (!hasLetter.test(skillsLearnt) || skillsLearnt.trim().length < 10) {
+      newErrors.skillsLearnt =
+        "Skills learnt must be at least 10 characters and contain letters.";
+    }
+
+    if (Object.keys(newErrors).length > 0) {
+      setFormErrors(newErrors);
+      return;
+    }
+
+    setFormErrors({});
     onClose();
+    onSave({ studentId: student.id, ...formData });
     setFormData({
       weekNumber: "",
       day: "",
@@ -54,7 +80,10 @@ const DailyModal = ({ isOpen, onClose, onSave, initialData }) => {
         <button className="daily-modal-close" onClick={onClose}>
           &times;
         </button>
-        <h2>Work Details for week {formData.weekNumber ? formData.weekNumber : "1"}</h2>
+        <h2>
+          Work Details for week{" "}
+          {formData.weekNumber ? formData.weekNumber : "1"}
+        </h2>
         <form onSubmit={handleSubmit}>
           {/* Input fields */}
           <div className="daily-modal-form-group">
@@ -66,7 +95,9 @@ const DailyModal = ({ isOpen, onClose, onSave, initialData }) => {
               onChange={handleChange}
               required
             >
-            <option defaultValue={true} value="">--Select Week--</option>
+              <option defaultValue={true} value="">
+                --Select Week--
+              </option>
               {[...Array(12).keys()].map((week) => (
                 <option key={week + 1} value={week + 1}>
                   Week {week + 1}
@@ -74,21 +105,24 @@ const DailyModal = ({ isOpen, onClose, onSave, initialData }) => {
               ))}
             </select>
           </div>
-          {formErrors && (
-            <p style={{ color: "red", fontWeight: "bold", fontSize: "12px" }}>
-              {formErrors}
-            </p>
-          )}
           <div className="daily-modal-form-group">
             <label htmlFor="day">Day</label>
-            <input
-              type="text"
+            <select
               id="day"
               name="day"
               value={formData.day}
               onChange={handleChange}
               required
-            />
+            >
+              <option value="">--Select Day--</option>
+              <option value="Monday">Monday</option>
+              <option value="Tuesday">Tuesday</option>
+              <option value="Wednesday">Wednesday</option>
+              <option value="Thursday">Thursday</option>
+              <option value="Friday">Friday</option>
+              <option value="Saturday">Saturday</option>
+              <option value="Sunday">Sunday</option>
+            </select>
           </div>
           <div className="daily-modal-form-group">
             <label htmlFor="date">Date</label>
@@ -110,6 +144,9 @@ const DailyModal = ({ isOpen, onClose, onSave, initialData }) => {
               onChange={handleChange}
               required
             ></textarea>
+            {formErrors.description && (
+              <p style={{ color: "red", fontSize: "12px" }}>{formErrors.description}</p>
+            )}
           </div>
           <div className="daily-modal-form-group">
             <label htmlFor="skills">Skills Learnt</label>
@@ -120,6 +157,9 @@ const DailyModal = ({ isOpen, onClose, onSave, initialData }) => {
               onChange={handleChange}
               required
             ></textarea>
+            {formErrors.skillsLearnt && (
+              <p style={{ color: "red", fontSize: "12px" }}>{formErrors.skillsLearnt}</p>
+            )}
           </div>
           <button
             type="submit"
